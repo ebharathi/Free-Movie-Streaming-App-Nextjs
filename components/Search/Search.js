@@ -156,7 +156,7 @@ const Search=()=>{
                    <div>
                      {
                         data.map((single)=>single.title&&
-                         <div className="flex my-1 hover:bg-blue-50 cursor-pointer">
+                         <a className="flex my-1 hover:bg-blue-50 cursor-pointer" href={single.id}>
                             {
                            single.image&&
                             <img src={single.image.url?single.image.url:''} style={{width:'30px',height:'30px'}}/>
@@ -170,7 +170,7 @@ const Search=()=>{
                                 single.titleType&&
                                 <div className=" text-[10px] mx-1 flex justify-center items-center px-1 py-1 " style={{float:'right'}}><span className="bg-blue-100 px-1 rounded-sm">{single.titleType}</span></div>
                             }
-                         </div>
+                         </a>
                         )
                      }
                    </div>
