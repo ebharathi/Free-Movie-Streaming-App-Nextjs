@@ -114,6 +114,12 @@ const Title=({titleId})=>{
                                             </div>
                                             <div>
                                                 {
+                                                    data.releaseDate&&
+                                                    <span className="text-[10px] bg-blue-100 rounded-sm px-2 py-1">{data.releaseDate}</span>
+                                                }
+                                            </div>    
+                                            <div>
+                                                {
                                                     data.genres.map((s)=><span className=" cursor-pointer bg-white hover:bg-black text-black hover:text-white border-2 border-black mx-1 text-[11px] rounded-md px-1 ">{s}</span>)
                                                 }
                                             </div>
