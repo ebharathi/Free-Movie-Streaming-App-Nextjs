@@ -69,9 +69,12 @@ let seriesdemo={
       text: `"Socially awkward high school student Otis may not have much experience in the lovemaking department, but he gets good guidance on the topic in his personal sex ed course -- living with mom Jean, who is a sex therapist. Being surrounded by manuals, videos and tediously open conversations about sex, Otis has become a reluctant expert on the subject. When his classmates learn about his home life, Otis decides to use his insider knowledge to improve his status at school, so he teams with whip-smart bad girl Maeve to set up an underground sex therapy clinic to deal with their classmates' problems. But through his analysis of teenage sexuality, Otis realizes that he may need some therapy of his own.`
     }
   }
-const Title=({titleId})=>{
+const Title=({titleId,season=999999,episode=9999999})=>{
     const [data,setData]=useState();
     const [loader,setLoader]=useState(true)
+    const [seasons,setSeasons]=useState([])
+    const [currentSeason,setCurrentSeason]=useState(0);
+    const [currentEpisode,setCurrentEpisode]=useState(0);
     // useEffect(()=>{
         const getTitleData=async()=>{
             let data={
@@ -80,23 +83,79 @@ const Title=({titleId})=>{
                await axios.post('/api/overview',data)
                  .then((response)=>{
                      console.log("From backend-->",response.data);
-                    if(response.data.error==false) 
-                    {
-                        setData(response.data.data);
-                        setLoader(false)
-                    }
-                  
-                 })
+                     if(response.data.error==false) 
+                     {
+                       setData(response.data.data);
+                       setLoader(false)
+                      }
+                      
+                    })
     }
     if(titleId!=undefined&&loader)
-      getTitleData();
-    // },[])
+    getTitleData();
+  // },[])
+  const [embeddedLink,setE]=useState(`https://www.2embed.cc/embed/${titleId}`);
+    useEffect(()=>{
+      const getSeasons=async()=>{
+        let data={
+          titleId:titleId
+        }
+        await axios.post("/api/seasons",data)
+        .then((response)=>{
+                console.log("From backend-->",response.data);
+                if(response.data.error==false)
+                {
+
+                }
+                  setSeasons(response.data.data);
+              })
+      }
+      if(data&&data.title)
+      {
+        if(data.title.titleType=='tvSeries')
+        {
+          getSeasons();
+          setCurrentSeason(season);
+          setCurrentEpisode(episode);
+          setE(`https://www.2embed.cc/embedtv/${titleId}&s=${parseInt(season)+1}&e=${parseInt(episode)+1}`);
+        }
+      }
+  
+    },[data])
     
     return (
         <div className="flex flex-col">
                  <div>
-                 <iframe  className="w-full" style={{height:'80vh'}} src={`https://www.2embed.cc/embed/${titleId}`}></iframe>
+                 <iframe  className="w-full" style={{height:'80vh'}} src={embeddedLink}></iframe>
                  </div>
+                 {
+                  seasons.length>0&&
+                  <div className="mx-1 grid space-x-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                       {
+                        seasons.map((single,index)=>
+                         <div onClick={()=>setCurrentSeason(index)} className={`${currentSeason==index?'bg-blue-900':'bg-black'} flex justify-center items-center mt-1  rounded-md text-white hover:text-black hover:bg-white cursor-pointer px-1 py-1`}>
+                            {/* <p className="bg-black rounded-md text-white px-1 py-1"> */}
+                            season {single.season}  
+                            {/* </p> */}
+                         </div>
+                        )
+                       }
+                  </div>
+                 }
+                 {
+                  seasons.length>0&&
+                  <div className="mx-1 grid space-x-1 grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                        {
+                          seasons[currentSeason].episodes.map((episode,index)=>
+                          <div className={`${currentEpisode==index?'bg-blue-900':''} text-[11px] flex justify-center items-center mt-1 bg-[#948e8e] rounded-md text-white hover:text-black hover:bg-white cursor-pointer px-1 py-1`}>
+                                      <a href={`/title/${titleId}/${currentSeason}/${index}`}>
+                                          {index+1}.{episode.title}
+                                        </a>
+                           </div> 
+                          )
+                        }
+                  </div>
+                 }
                  <div>
                      {
                         loader?
@@ -120,7 +179,7 @@ const Title=({titleId})=>{
                                             </div>    
                                             <div>
                                                 {
-                                                    data.genres.map((s)=><span className=" cursor-pointer bg-white hover:bg-black text-black hover:text-white border-2 border-black mx-1 text-[11px] rounded-md px-1 ">{s}</span>)
+                                                    data.genres&&data.genres.map((s)=><span className=" cursor-pointer bg-white hover:bg-black text-black hover:text-white border-2 border-black mx-1 text-[11px] rounded-md px-1 ">{s}</span>)
                                                 }
                                             </div>
                                             <div>

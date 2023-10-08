@@ -156,7 +156,7 @@ const Search=()=>{
                    <div>
                      {
                         data.map((single)=>single.title&&
-                         <a className="flex my-1 hover:bg-blue-50 cursor-pointer" href={single.id}>
+                         <a className="flex my-1 hover:bg-blue-50 cursor-pointer" href={single.titleType=="tvSeries"?`${single.id}/0/0`:single.id}>
                             {
                            single.image&&
                             <img src={single.image.url?single.image.url:''} style={{width:'30px',height:'30px'}}/>
