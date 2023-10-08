@@ -135,8 +135,8 @@ const Search=()=>{
             if(response.data.error==false)
               if(response.data.query==text)
               {
-                  console.log("old:",response.data.query)
-                  console.log("new:",text)
+                //   console.log("old:",response.data.query)
+                //   console.log("new:",text)
                   setData(response.data.data)
               }
            })

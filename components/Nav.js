@@ -25,6 +25,29 @@ const Nav=()=>{
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
+  //for searching
+  const [text,setText]=useState("");
+  const [data,setData]=useState([])
+    useEffect(()=>{
+        const search=async()=>{
+           let data={
+            query:text
+           } 
+           await axios.post('/api/search',data)
+           .then((response)=>{
+            console.log("From backend-->",response);
+            if(response.data.error==false)
+              if(response.data.query==text)
+              {
+                //   console.log("old:",response.data.query)
+                //   console.log("new:",text)
+                  setData(response.data.data)
+              }
+           })
+        }
+        if(text!="")
+          search();
+    },[text])
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -63,6 +86,7 @@ const Nav=()=>{
                 containerProps={{
                   className: "min-w-[288px]",
                 }}
+                onChange={(e)=>setText(e.target.value)}
               />
               <Button size="sm" className="!absolute right-1 top-1 rounded">
                 Search

@@ -122,7 +122,6 @@ const Title=({titleId,season=999999,episode=9999999})=>{
       }
   
     },[data])
-    
     return (
         <div className="flex flex-col">
                  <div>
