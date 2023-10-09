@@ -8,7 +8,7 @@ import {
   Input
 } from "@material-tailwind/react";
 import { useState,useEffect } from "react";
- 
+ import axios from "axios";
   
 const Nav=()=>{
   const [openNav, setOpenNav] =useState(false);
@@ -92,9 +92,32 @@ const Nav=()=>{
                 Search
               </Button>
             </div>
-            <div className="absolute bg-white rounded-lg w-72 py-5">
-                skjsnjjs
+            {
+              data.length>0&&
+            <div className="absolute bg-white rounded-lg w-72 py-1">
+              <div className="flex flex-col space-y-1">
+                {
+                  data.map((single)=>single.title&&
+                  <a className="flex mx-1 my-1  hover:bg-blue-50 cursor-pointer" href={single.titleType=="tvSeries"?`${single.id}/0/0`:single.id}>
+                            {
+                           single.image&&
+                            <img src={single.image.url?single.image.url:''} style={{width:'20px',height:'20px'}}/>
+                            }
+                            <div>{single.title}</div>
+                            {
+                                single.year&&
+                                <div className=" text-[8px] mx-1 flex justify-center items-center px-1 py-1 " style={{float:'right'}}><span className="bg-blue-100 px-1 rounded-sm">{single.year}</span></div>
+                            }
+                            {
+                                single.titleType&&
+                                <div className=" text-[7px] mx-1 flex justify-center items-center px-1 py-1 " style={{float:'right'}}><span className="bg-blue-100 px-1 rounded-sm">{single.titleType}</span></div>
+                            }
+                  </a>
+                  )
+                }
+                </div>
             </div>
+            }
           </Typography>
       }
     </ul>
