@@ -122,7 +122,7 @@ let demo=[
     }
 ]
 const Search=()=>{
-    const [text,setText]=useState("");
+    const [text,setText]=useState("br");
     const [data,setData]=useState([])
     useEffect(()=>{
         const search=async()=>{
@@ -141,7 +141,7 @@ const Search=()=>{
               }
            })
         }
-        if(text!="")
+        // if(text!="")
           search();
     },[text])
     return (
